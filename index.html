@@ -19,72 +19,64 @@
             font-family: 'Georgia', serif;
             background-color: var(--bg-color);
             margin: 0;
-            padding: 20px;
+            padding: 10px; 
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .art-card-container {
             position: relative;
-            padding: 15px; 
-            background: var(--gold-dark);
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-            border-radius: 4px;
-            overflow: hidden; 
+            padding: 8px; 
             background: linear-gradient(135deg, #a88e5a 0%, #d4af37 50%, #a88e5a 100%);
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            overflow: hidden; 
         }
 
         .light-glow {
             position: absolute;
             top: 0;
             left: 0;
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             background: radial-gradient(circle, var(--gold-bright) 0%, var(--gold-light) 30%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 1;
-            animation: move-light 10s linear infinite;
-            filter: blur(8px);
-            opacity: 0.9;
+            animation: move-light 8s linear infinite;
+            filter: blur(10px);
+            opacity: 0.7;
         }
 
         @keyframes move-light {
-            0%   { top: -75px; left: -75px; }            
-            25%  { top: -75px; left: calc(100% - 75px); } 
-            50%  { top: calc(100% - 75px); left: calc(100% - 75px); } 
-            75%  { top: calc(100% - 75px); left: -75px; } 
-            100% { top: -75px; left: -75px; }            
-        }
-
-        .art-card-container::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3);
-            pointer-events: none;
-            z-index: 2;
+            0%   { transform: translate(-50%, -50%); top: 0; left: 0; }            
+            25%  { transform: translate(-50%, -50%); top: 0; left: 100%; } 
+            50%  { transform: translate(-50%, -50%); top: 100%; left: 100%; } 
+            75%  { transform: translate(-50%, -50%); top: 100%; left: 0; } 
+            100% { transform: translate(-50%, -50%); top: 0; left: 0; }            
         }
 
         .art-card {
             background: white;
             position: relative;
             z-index: 3;
-            padding: 30px;
+            padding: 20px 15px; 
             text-align: center;
+            border-radius: 4px;
         }
 
         h1 {
             color: var(--dark-blue);
-            font-size: 1.6rem;
-            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            margin: 0 0 8px 0;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            line-height: 1.2;
         }
 
         .artist-name {
@@ -92,113 +84,105 @@
             color: #666;
             margin-bottom: 4px;
             display: block;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .quote {
             display: block;
             font-style: italic;
             color: rgba(102, 102, 102, 0.7);
-            font-size: 0.85rem;
-            margin-bottom: 12px; /* Ridotto da 25px */
-            line-height: 1.5;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
             max-width: 90%;
             margin-left: auto;
             margin-right: auto;
-            padding: 0 10px;
-        }
-
-        .description {
-            font-size: 1.15rem;
-            line-height: 1.7;
-            margin-bottom: 30px;
-            text-align: left;
-            color: #333;
-            min-height: 100px;
-        }
-
-        .word-highlight {
-            background-color: var(--highlight);
-            border-radius: 3px;
-            box-shadow: 0 0 5px var(--gold);
         }
 
         .controls-panel {
-            border-top: 1px solid #eee;
-            padding-top: 20px;
+            border-bottom: 1px solid #eee; 
+            margin-bottom: 20px;
+            padding-bottom: 15px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
+        }
+
+        .status-msg {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .main-btn {
-            position: relative;
             background: linear-gradient(to bottom, #d4af37, #a88e5a);
             color: white;
-            border: 1px solid #8a6d3b;
-            padding: 14px 25px;
-            font-size: 0.95rem;
+            border: none;
+            padding: 16px 20px; 
+            font-size: 0.9rem;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 50px; 
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin: 0 auto;
-            transition: all 0.2s ease-in-out;
+            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
             width: 100%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            overflow: hidden;
         }
 
-        .main-btn:hover {
-            transform: translateY(2px); 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2); 
-            filter: brightness(1.05);
-        }
-
-        .main-btn:active { 
-            transform: translateY(4px); 
-            box-shadow: none;
-        }
-
-        .btn-icon-svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-            display: inline-block;
-            vertical-align: middle;
+        .main-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .main-btn.playing { 
             background: linear-gradient(to bottom, #1a252f, #0d1318);
-            border-color: #000;
+        }
+
+        .btn-icon-svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
         }
 
         .speed-control {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            font-size: 0.9rem;
+            gap: 12px;
+            font-size: 0.85rem;
             color: #777;
-        }
-
-        .status-msg {
-            font-size: 0.8rem;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
         }
 
         input[type=range] {
             accent-color: var(--gold);
-            cursor: pointer;
-            width: 120px;
+            height: 25px; 
+            width: 100px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: left;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .word-highlight {
+            background-color: var(--highlight);
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+
+        @media (max-width: 380px) {
+            h1 { font-size: 1.2rem; }
+            .description { font-size: 1rem; }
+            .art-card { padding: 15px 10px; }
         }
     </style>
 </head>
@@ -213,8 +197,6 @@
                 <span class="artist-name">Caspar David Friedrich, 1818</span>
                 <span class="quote">Dipinto da Gabriele Branciforti 3C A.S.25/26</span>
                 
-                <div class="description" id="textToRead">Il Viandante sul mare di nebbia non è solo il capolavoro di Caspar David Friedrich, ma il manifesto visivo dell’intero Romanticismo tedesco. Al centro della scena, un uomo solitario domina uno sperone roccioso, trasformato in un piedistallo naturale da cui contemplare l'immenso. Davanti a lui, le vette alpine e le nuvole si fondono in un abbraccio misterioso, incarnando quel sentimento del "Sublime" che unisce meraviglia e timore. Friedrich orchestra la composizione con precisione geometrica: il viandante è il fulcro immobile di un mondo in movimento, punto d’incontro tra la terra scura e il cielo madreperlaceo. L'opera rimane soprattutto un invito all'introspezione: un dialogo silenzioso tra l'animo umano e l'insondabile mistero della natura.</div>
-
                 <div class="controls-panel">
                     <div id="statusLabel" class="status-msg">Guida pronta all'uso</div>
                     
@@ -222,7 +204,7 @@
                         <span id="btnIconContainer">
                             <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/></svg>
                         </span>
-                        <span id="btnText">Ascolta la descrizione</span>
+                        <span id="btnText">Ascolta descrizione</span>
                     </button>
 
                     <div class="speed-control">
@@ -231,6 +213,8 @@
                         <span id="speedVal">1.0x</span>
                     </div>
                 </div>
+
+                <div class="description" id="textToRead">Il Viandante sul mare di nebbia non è solo il capolavoro di Caspar David Friedrich, ma il manifesto visivo dell’intero Romanticismo tedesco. Al centro della scena, un uomo solitario domina uno sperone roccioso, trasformato in un piedistallo naturale da cui contemplare l'immenso. Davanti a lui, le vette alpine e le nuvole si fondono in un abbraccio misterioso, incarnando quel sentimento del "Sublime" che unisce meraviglia e timore. Friedrich orchestra la composizione con precisione geometrica: il viandante è il fulcro immobile di un mondo in movimento, punto d’incontro tra la terra scura e il cielo madreperlaceo. L'opera rimane soprattutto un invito all'introspezione: un dialogo silenzioso tra l'animo umano e l'insondabile mistero della natura.</div>
             </div>
         </div>
     </div>
@@ -247,10 +231,12 @@
         let lastCharIndex = 0; 
         let isInternalAction = false; 
 
+        // Modificata la logica della velocità: 2x ora è più lento/naturale
         function getRealRate(val) {
             const visualVal = val / 10;
             if (visualVal <= 1.0) return visualVal; 
-            return 1.0 + (visualVal - 1.0) * 0.45;
+            // Ridotta la progressione per i valori sopra 1.0x
+            return 1.0 + (visualVal - 1.0) * 0.35; 
         }
 
         function humanizeText(text) {
@@ -297,7 +283,6 @@
             utterance.lang = 'it-IT';
             utterance.rate = getRealRate(document.getElementById('speedRange').value);
             utterance.pitch = 0.95; 
-            utterance.volume = 1.0;
 
             const voices = synth.getVoices();
             const preferredVoice = voices.find(v => 
@@ -317,7 +302,7 @@
 
             utterance.onstart = () => {
                 document.getElementById('mainBtn').classList.add('playing');
-                document.getElementById('btnText').innerText = "Ferma Audio";
+                document.getElementById('btnText').innerText = "Ferma Lettura";
                 document.getElementById('btnIconContainer').innerHTML = stopIcon;
                 document.getElementById('statusLabel').innerText = "Lettura in corso...";
             };
@@ -332,7 +317,7 @@
             utterance.onerror = (e) => {
                 if (!isInternalAction && e.error !== 'interrupted' && e.error !== 'canceled') {
                     resetUI();
-                    document.getElementById('statusLabel').innerText = "Errore audio. Riprova.";
+                    document.getElementById('statusLabel').innerText = "Errore. Riprova.";
                 }
             };
 
@@ -350,7 +335,7 @@
         function resetUI() {
             textToRead.innerHTML = originalHTML;
             document.getElementById('mainBtn').classList.remove('playing');
-            document.getElementById('btnText').innerText = "Ascolta la descrizione";
+            document.getElementById('btnText').innerText = "Ascolta descrizione";
             document.getElementById('btnIconContainer').innerHTML = playIcon;
             document.getElementById('statusLabel').innerText = "Guida pronta all'uso";
         }
