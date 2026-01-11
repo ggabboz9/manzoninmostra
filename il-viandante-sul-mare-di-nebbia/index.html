@@ -11,13 +11,13 @@
             --gold-light: #f4d03f;  
             --gold-dark: #a88e5a;
             --dark-blue: #1a252f;
-            --bg-color: #f4f4f2;
+            --bg-mist: #cbd5e1;
+            --bg-rock: #475569;
             --highlight: rgba(212, 175, 55, 0.4);
         }
 
         body {
             font-family: 'Georgia', serif;
-            background-color: var(--bg-color);
             margin: 0;
             padding: 10px; 
             display: flex;
@@ -25,6 +25,29 @@
             align-items: center;
             min-height: 100vh;
             -webkit-tap-highlight-color: transparent;
+            /* Sfondo che simula i colori del dipinto sfocato */
+            background: radial-gradient(circle at 50% 100%, #2c3e50, #475569 20%, #94a3b8 50%, #cbd5e1 100%);
+            background-size: 200% 200%;
+            animation: atmosphericDrift 20s ease-in-out infinite alternate;
+            overflow-x: hidden;
+        }
+
+        @keyframes atmosphericDrift {
+            0% { background-position: 50% 0%; }
+            100% { background-position: 50% 100%; }
+        }
+
+        /* Overlay per aumentare l'effetto "nebbia" */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(60px);
+            z-index: -1;
         }
 
         .art-card-container {
@@ -33,8 +56,8 @@
             background: linear-gradient(135deg, #a88e5a 0%, #d4af37 50%, #a88e5a 100%);
             max-width: 500px;
             width: 100%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            border-radius: 10px;
             overflow: hidden; 
         }
 
@@ -42,8 +65,8 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             background: radial-gradient(circle, var(--gold-bright) 0%, var(--gold-light) 30%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
@@ -65,7 +88,7 @@
             background: white;
             position: relative;
             z-index: 3;
-            padding: 20px 15px; 
+            padding: 25px 20px; 
             text-align: center;
             border-radius: 4px;
         }
@@ -106,13 +129,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-        }
-
-        .status-msg {
-            font-size: 0.75rem;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            align-items: center;
         }
 
         .main-btn {
@@ -183,6 +200,7 @@
             h1 { font-size: 1.2rem; }
             .description { font-size: 1rem; }
             .art-card { padding: 15px 10px; }
+            .art-card-container { padding: 8px; }
         }
     </style>
 </head>
@@ -198,8 +216,6 @@
                 <span class="quote">Dipinto da Gabriele Branciforti 3C A.S.25/26</span>
                 
                 <div class="controls-panel">
-                    <div id="statusLabel" class="status-msg">Guida pronta all'uso</div>
-                    
                     <button id="mainBtn" class="main-btn" onclick="toggleAudio()">
                         <span id="btnIconContainer">
                             <svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/></svg>
@@ -231,11 +247,9 @@
         let lastCharIndex = 0; 
         let isInternalAction = false; 
 
-        // Modificata la logica della velocità: 2x ora è più lento/naturale
         function getRealRate(val) {
             const visualVal = val / 10;
             if (visualVal <= 1.0) return visualVal; 
-            // Ridotta la progressione per i valori sopra 1.0x
             return 1.0 + (visualVal - 1.0) * 0.35; 
         }
 
@@ -304,7 +318,6 @@
                 document.getElementById('mainBtn').classList.add('playing');
                 document.getElementById('btnText').innerText = "Ferma Lettura";
                 document.getElementById('btnIconContainer').innerHTML = stopIcon;
-                document.getElementById('statusLabel').innerText = "Lettura in corso...";
             };
 
             utterance.onend = () => {
@@ -317,7 +330,6 @@
             utterance.onerror = (e) => {
                 if (!isInternalAction && e.error !== 'interrupted' && e.error !== 'canceled') {
                     resetUI();
-                    document.getElementById('statusLabel').innerText = "Errore. Riprova.";
                 }
             };
 
@@ -337,7 +349,6 @@
             document.getElementById('mainBtn').classList.remove('playing');
             document.getElementById('btnText').innerText = "Ascolta descrizione";
             document.getElementById('btnIconContainer').innerHTML = playIcon;
-            document.getElementById('statusLabel').innerText = "Guida pronta all'uso";
         }
 
         if (speechSynthesis.onvoiceschanged !== undefined) {
