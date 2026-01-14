@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dettagli Opera d'Arte - Monet</title>
+    <style>
+        :root {
+            --monet-green: #2d5a27;
+            --monet-water: #4682b4;
+            --monet-lily: #f8c8dc;
+            --gold: #d4af37;
+            --gold-bright: #fff9e6; 
+            --gold-light: #f4d03f;  
+            --gold-dark: #a88e5a;
+            --dark-blue: #1a2a2a;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 10px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at 50% 100%, #1a2a2a, #2d5a27 40%, #4682b4 80%, #a8e6cf 100%);
+            background-size: 200% 200%;
+            animation: atmosphericDrift 20s ease-in-out infinite alternate;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        @keyframes atmosphericDrift {
+            0% { background-position: 50% 0%; }
+            100% { background-position: 50% 100%; }
+        }
+
+        .art-card-container {
+            position: relative;
+            padding: 8px; 
+            background: linear-gradient(135deg, #a88e5a 0%, #d4af37 50%, #a88e5a 100%);
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            border-radius: 12px;
+            overflow: hidden; 
+        }
+
+        .light-glow {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, var(--gold-bright) 0%, var(--gold-light) 30%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            filter: blur(20px);
+            opacity: 0.5;
+        }
+
+        .glow-1 { top: 0; left: 0; animation: move-light-1 12s linear infinite; }
+        .glow-2 { bottom: 0; right: 0; animation: move-light-2 12s linear infinite; }
+
+        @keyframes move-light-1 {
+            0%   { transform: translate(-50%, -50%); top: 0; left: 0; }            
+            50%  { transform: translate(-50%, -50%); top: 100%; left: 100%; } 
+            100% { transform: translate(-50%, -50%); top: 0; left: 0; }            
+        }
+        @keyframes move-light-2 {
+            0%   { transform: translate(50%, 50%); bottom: 0; right: 0; }            
+            50%  { transform: translate(50%, 50%); bottom: 100%; right: 100%; } 
+            100% { transform: translate(50%, 50%); bottom: 0; right: 0; }            
+        }
+
+        .art-card {
+            background: white;
+            position: relative;
+            z-index: 3;
+            padding: 30px 25px; 
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            font-size: 1.4rem;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .artist-name {
+            font-style: italic;
+            color: #444;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .quote {
+            display: block;
+            font-style: italic;
+            color: rgba(68, 68, 68, 0.6);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .controls-panel {
+            border-bottom: 1px solid #f0f0f0; 
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .main-btn {
+            background: linear-gradient(to bottom, #d4af37, #a88e5a);
+            color: white;
+            border: none;
+            padding: 18px; 
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
+            width: 100%;
+            user-select: none;
+        }
+
+        #btnIconContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 24px;
+        }
+
+        .main-btn.playing { 
+            background: var(--monet-green);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        input[type=range] {
+            accent-color: var(--monet-green);
+            width: 120px;
+            height: 30px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            text-align: left;
+            color: #222;
+            position: relative;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        @media (max-width: 480px) {
+            .art-card { padding: 25px 15px; }
+            h1 { font-size: 1.2rem; }
+            .description { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="art-card-container">
+        <div class="light-glow glow-1"></div>
+        <div class="light-glow glow-2"></div>
+        
+        <div class="art-card">
+            <h1>Il ponte giapponese</h1>
+            <span class="artist-name">Claude Monet, 1899</span>
+            <span class="quote">Analisi artistica - A.S. 2025/2026</span>
+            
+            <div class="controls-panel">
+                <button id="mainBtn" class="main-btn">
+                    <span id="btnIconContainer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </span>
+                    <span id="btnText">Ascolta descrizione</span>
+                </button>
+
+                <div class="speed-control">
+                    <span>Velocità:</span>
+                    <input type="range" id="speedRange" min="5" max="15" step="1" value="10">
+                    <span id="speedVal">1.0x</span>
+                </div>
+            </div>
+
+            <div class="description" id="textContent">L’opera raffigura un ponte ad arco in legno che attraversa uno stagno ricoperto di ninfee. Il ponte occupa la zona centrale del dipinto ed è circondato da una vegetazione molto fitta, che quasi lo ingloba nello spazio naturale. Dal punto di vista compositivo, non c’è una distinzione netta tra primo piano, sfondo e profondità: tutto sembra disposto su un unico piano visivo. L’acqua riflette piante e luce, rendendo difficile distinguere ciò che è reale da ciò che è riflesso. Questo coinvolge lo spettatore e lo immerge completamente nella scena. Il colore è l’elemento principale dell’opera. Prevalgono i verdi, declinati in molte tonalità diverse, insieme ad azzurri, blu e piccoli tocchi di rosa e viola. I colori non sono realistici, ma servono a rendere le sensazioni visive del momento. La pennellata è rapida, evidente e irregolare. Le forme non sono delineate con precisione: il ponte, le piante e l’acqua sono suggeriti più che descritti. Questo fa sì che l’immagine sembri quasi vibrare. La luce è diffusa e morbida, senza forti contrasti di ombra. Non c’è una fonte luminosa riconoscibile: la luce filtra ovunque e contribuisce a creare un’atmosfera tranquilla e sospesa. Nel complesso, l’opera non vuole raccontare una storia, ma rappresentare un’impressione visiva, un attimo di osservazione della natura. La realtà è trasformata in colore e luce, fino a diventare quasi astratta.</div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('mainBtn');
+        const textContent = document.getElementById('textContent');
+        const speedRange = document.getElementById('speedRange');
+        const speedVal = document.getElementById('speedVal');
+        const originalText = textContent.innerText;
+
+        let synth = window.speechSynthesis;
+        let isPlaying = false;
+        let utterance = null;
+
+        const iconPlay = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+        const iconStop = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+
+        function prepareTextForSpeech(text) {
+            return text
+                .replace(/Claude Monet/gi, 'Clòd Monè') 
+                .replace(/1899/g, 'milleottocentonovantanove')
+                .replace(/A\.S\./gi, 'Anno Scolastico') 
+                .replace(/\. /g, '... ') 
+                .replace(/: /g, ', ');
+        }
+
+        function unlockAudio() {
+            const silent = new SpeechSynthesisUtterance('');
+            silent.volume = 0;
+            synth.speak(silent);
+            document.removeEventListener('touchstart', unlockAudio);
+            document.removeEventListener('mousedown', unlockAudio);
+        }
+        document.addEventListener('touchstart', unlockAudio);
+        document.addEventListener('mousedown', unlockAudio);
+
+        speedRange.addEventListener('input', () => {
+            speedVal.innerText = (speedRange.value / 10).toFixed(1) + "x";
+            if (isPlaying) {
+                stopAudio();
+                startAudio();
+            }
+        });
+
+        btn.addEventListener('click', () => {
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                startAudio();
+            }
+        });
+
+        function startAudio() {
+            synth.cancel();
+            
+            const speechText = prepareTextForSpeech(originalText);
+            utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.lang = 'it-IT';
+            utterance.rate = speedRange.value / 10;
+            utterance.pitch = 1.0; 
+
+            const voices = synth.getVoices();
+            const preferred = voices.find(v => v.lang.startsWith('it') && (v.name.includes('Natural') || v.name.includes('Premium'))) || 
+                            voices.find(v => v.lang.startsWith('it'));
+            if (preferred) utterance.voice = preferred;
+
+            utterance.onstart = () => {
+                isPlaying = true;
+                btn.classList.add('playing');
+                document.getElementById('btnText').innerText = "Ferma Lettura";
+                document.getElementById('btnIconContainer').innerHTML = iconStop;
+            };
+
+            utterance.onend = () => {
+                if (isPlaying) stopAudio();
+            };
+
+            synth.speak(utterance);
+        }
+
+        function stopAudio() {
+            synth.cancel();
+            isPlaying = false;
+            btn.classList.remove('playing');
+            document.getElementById('btnText').innerText = "Ascolta descrizione";
+            document.getElementById('btnIconContainer').innerHTML = iconPlay;
+        }
+
+        window.onbeforeunload = () => synth.cancel();
+    </script>
+</body>
+</html>
