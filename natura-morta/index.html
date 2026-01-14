@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dettagli Opera d'Arte - Cézanne</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-bright: #fff9e6; 
+            --gold-light: #f4d03f;  
+            --gold-dark: #a88e5a;
+            --dark-blue: #1a1a1a;
+            --highlight: rgba(212, 175, 55, 0.4);
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 10px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at 50% 100%, #2c2c2c, #4a4435 30%, #6e6e6e 70%, #8c8371 100%);
+            background-size: 200% 200%;
+            animation: atmosphericDrift 20s ease-in-out infinite alternate;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        @keyframes atmosphericDrift {
+            0% { background-position: 50% 0%; }
+            100% { background-position: 50% 100%; }
+        }
+
+        .art-card-container {
+            position: relative;
+            padding: 8px; 
+            background: linear-gradient(135deg, #a88e5a 0%, #d4af37 50%, #a88e5a 100%);
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            overflow: hidden; 
+        }
+
+        .light-glow {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, var(--gold-bright) 0%, var(--gold-light) 30%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            filter: blur(20px);
+            opacity: 0.5;
+        }
+
+        .glow-1 { top: 0; left: 0; animation: move-light-1 12s linear infinite; }
+        .glow-2 { bottom: 0; right: 0; animation: move-light-2 12s linear infinite; }
+
+        @keyframes move-light-1 {
+            0%   { transform: translate(-50%, -50%); top: 0; left: 0; }            
+            50%  { transform: translate(-50%, -50%); top: 100%; left: 100%; } 
+            100% { transform: translate(-50%, -50%); top: 0; left: 0; }            
+        }
+        @keyframes move-light-2 {
+            0%   { transform: translate(50%, 50%); bottom: 0; right: 0; }            
+            50%  { transform: translate(50%, 50%); bottom: 100%; right: 100%; } 
+            100% { transform: translate(50%, 50%); bottom: 0; right: 0; }            
+        }
+
+        .art-card {
+            background: white;
+            position: relative;
+            z-index: 3;
+            padding: 30px 25px; 
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            font-size: 1.4rem;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .artist-name {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .quote {
+            display: block;
+            font-style: italic;
+            color: rgba(85, 85, 85, 0.6);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .controls-panel {
+            border-bottom: 1px solid #f0f0f0; 
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .main-btn {
+            background: linear-gradient(to bottom, #d4af37, #a88e5a);
+            color: white;
+            border: none;
+            padding: 18px; 
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
+            width: 100%;
+            user-select: none;
+        }
+
+        #btnIconContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 24px;
+        }
+
+        .main-btn.playing { 
+            background: #1a1a1a;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        input[type=range] {
+            accent-color: var(--gold);
+            width: 120px;
+            height: 30px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            text-align: left;
+            color: #222;
+            position: relative;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        mark {
+            background-color: var(--highlight);
+            color: inherit;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 480px) {
+            .art-card { padding: 25px 15px; }
+            h1 { font-size: 1.2rem; }
+            .description { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="art-card-container">
+        <div class="light-glow glow-1"></div>
+        <div class="light-glow glow-2"></div>
+        
+        <div class="art-card">
+            <h1>Natura morta</h1>
+            <span class="artist-name">Paul Cézanne, 1899</span>
+            <span class="quote">Dipinto da Leonardo Gentile 3C A.S.25/26</span>
+            
+            <div class="controls-panel">
+                <button id="mainBtn" class="main-btn">
+                    <span id="btnIconContainer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </span>
+                    <span id="btnText">Ascolta descrizione</span>
+                </button>
+
+                <div class="speed-control">
+                    <span>Velocità:</span>
+                    <input type="range" id="speedRange" min="5" max="15" step="1" value="10">
+                    <span id="speedVal">1.0x</span>
+                </div>
+            </div>
+
+            <div class="description" id="textContent">Nel dipinto si vede una brocca marrone, un piatto bianco con frutti, e altri frutti disposti sul tavolo. Un panno chiaro pende dal tavolino, mentre sullo sfondo una tenda decorata lascia intravedere la parete. Prevalgono tonalità fredde, soprattutto nello sfondo, nella tenda e nel tavolo, dipinti con grigi, ocra e colori scuri. In contrasto, la parte centrale è caratterizzata da colori caldi: i frutti gialli e rossi e la brocca decorata attirano subito l’attenzione dell’osservatore. Il tavolo è rappresentato frontalmente, mentre il lato destro mostra una varietà di colori che aumentano la profondità dello spazio. Lo sfondo molto scuro fa risaltare la brocca chiara e gli oggetti in primo piano, come i piatti e i panni, realizzati con grigi chiari. Questo forte contrasto evidenzia la composizione. Cézanne attribuiva grande importanza al colore per costruire le forme, rendendole solide e ben definite. Lo spazio è reso dalla fuga obliqua del tavolino, dalle pieghe dei panni e dalla sovrapposizione degli oggetti. La composizione è equilibrata e simmetrica: la brocca è al centro, i frutti sono distribuiti in modo ordinato e il dipinto è diviso in due parti orizzontali. La brocca è collocata lungo l’asse verticale e la sua base coincide con l’incrocio delle diagonali, rendendola il punto focale dell’opera. I piatti con le mele sono disposti in modo leggermente obliquo verso l’alto a destra, creando movimento. I due panni sono sistemati in modo quasi simmetrico, contribuendo all’equilibrio visivo. I frutti sono distribuiti con attenzione: cinque su un piatto a destra della brocca, altri cinque sul lato opposto e tre al centro davanti alla brocca, creando una simmetria rispetto all’asse centrale.</div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('mainBtn');
+        const textContent = document.getElementById('textContent');
+        const speedRange = document.getElementById('speedRange');
+        const speedVal = document.getElementById('speedVal');
+        const originalText = textContent.innerText;
+
+        let synth = window.speechSynthesis;
+        let isPlaying = false;
+        let utterance = null;
+
+        const iconPlay = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+        const iconStop = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+
+        // Funzione per ottimizzare la fonetica e il ritmo
+        function prepareTextForSpeech(text) {
+            return text
+                .replace(/Cézanne/gi, 'Sezàn') // Correzione pronuncia francese
+                .replace(/A\.S\./gi, 'Anno Scolastico') // Espansione sigla
+                .replace(/\. /g, '... ') // Aggiunta di micro-pause alle conclusioni
+                .replace(/: /g, ', '); // Trasformazione due punti in pausa breve
+        }
+
+        function unlockAudio() {
+            const silent = new SpeechSynthesisUtterance('');
+            silent.volume = 0;
+            synth.speak(silent);
+            document.removeEventListener('touchstart', unlockAudio);
+            document.removeEventListener('mousedown', unlockAudio);
+        }
+        document.addEventListener('touchstart', unlockAudio);
+        document.addEventListener('mousedown', unlockAudio);
+
+        speedRange.addEventListener('input', () => {
+            speedVal.innerText = (speedRange.value / 10).toFixed(1) + "x";
+            if (isPlaying) {
+                stopAudio();
+                startAudio();
+            }
+        });
+
+        btn.addEventListener('click', () => {
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                startAudio();
+            }
+        });
+
+        function startAudio() {
+            synth.cancel();
+            
+            // Prepariamo il testo ottimizzato foneticamente
+            const speechText = prepareTextForSpeech(originalText);
+            utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.lang = 'it-IT';
+            utterance.rate = speedRange.value / 10;
+            utterance.pitch = 1.0; // Tono naturale
+
+            const voices = synth.getVoices();
+            // Cerchiamo una voce naturale di alta qualità se disponibile
+            const preferred = voices.find(v => v.lang.startsWith('it') && (v.name.includes('Natural') || v.name.includes('Premium'))) || 
+                            voices.find(v => v.lang.startsWith('it'));
+            if (preferred) utterance.voice = preferred;
+
+            utterance.onboundary = (event) => {
+                // Sincronizziamo l'indice sull'originale per l'highlight visivo
+                if (event.name === 'word') {
+                    highlightWord(event.charIndex, event.charLength);
+                }
+            };
+
+            utterance.onstart = () => {
+                isPlaying = true;
+                btn.classList.add('playing');
+                document.getElementById('btnText').innerText = "Ferma Lettura";
+                document.getElementById('btnIconContainer').innerHTML = iconStop;
+            };
+
+            utterance.onend = () => {
+                if (isPlaying) stopAudio();
+            };
+
+            synth.speak(utterance);
+        }
+
+        function stopAudio() {
+            synth.cancel();
+            isPlaying = false;
+            btn.classList.remove('playing');
+            document.getElementById('btnText').innerText = "Ascolta descrizione";
+            document.getElementById('btnIconContainer').innerHTML = iconPlay;
+            textContent.innerHTML = originalText;
+        }
+
+        function highlightWord(index, length) {
+            // Cerchiamo di approssimare l'indice sul testo originale
+            const before = originalText.substring(0, index);
+            const word = originalText.substring(index, index + length);
+            const after = originalText.substring(index + length);
+            textContent.innerHTML = `${before}<mark>${word}</mark>${after}`;
+            
+            const mark = textContent.querySelector('mark');
+            if (mark) {
+                mark.scrollIntoView({ behavior: 'auto', block: 'center' });
+            }
+        }
+
+        window.onbeforeunload = () => synth.cancel();
+    </script>
+</body>
+</html>
