@@ -11,8 +11,7 @@
             --gold-light: #f4d03f;  
             --gold-dark: #a88e5a;
             --dark-blue: #1a252f;
-            --bg-color: #f4f4f2;
-            --highlight: rgba(212, 175, 55, 0.4);
+            --bg-color: #0f1418; /* Sfondo scuro per far risaltare il dinamismo */
         }
 
         body {
@@ -24,16 +23,30 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden; /* Impedisce scroll per lo sfondo */
             -webkit-tap-highlight-color: transparent;
+            position: relative;
+        }
+
+        /* --- STILE SFONDO DINAMICO --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
 
         .art-card-container {
             position: relative;
+            z-index: 10; /* Sopra lo sfondo */
             padding: 8px; 
             background: linear-gradient(135deg, #a88e5a 0%, #d4af37 50%, #a88e5a 100%);
             max-width: 500px;
             width: 100%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 50px rgba(0,0,0,0.6);
             border-radius: 8px;
             overflow: hidden; 
         }
@@ -65,15 +78,15 @@
             background: white;
             position: relative;
             z-index: 3;
-            padding: 20px 15px; 
+            padding: 40px 30px; 
             text-align: center;
             border-radius: 4px;
         }
 
         h1 {
             color: var(--dark-blue);
-            font-size: 1.4rem;
-            margin: 0 0 8px 0;
+            font-size: 1.6rem;
+            margin: 0 0 12px 0;
             text-transform: uppercase;
             letter-spacing: 1px;
             line-height: 1.2;
@@ -82,259 +95,116 @@
         .artist-name {
             font-style: italic;
             color: #666;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
             display: block;
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
 
         .quote {
             display: block;
             font-style: italic;
             color: rgba(102, 102, 102, 0.7);
-            font-size: 0.8rem;
-            margin-bottom: 15px;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
             line-height: 1.4;
             max-width: 90%;
             margin-left: auto;
             margin-right: auto;
         }
 
-        .controls-panel {
-            border-bottom: 1px solid #eee; 
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .status-msg {
-            font-size: 0.75rem;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .main-btn {
-            background: linear-gradient(to bottom, #d4af37, #a88e5a);
-            color: white;
-            border: none;
-            padding: 16px 20px; 
-            font-size: 0.9rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            border-radius: 50px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: transform 0.1s, box-shadow 0.1s;
-            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
-            width: 100%;
-        }
-
-        .main-btn:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        .main-btn.playing { 
-            background: linear-gradient(to bottom, #1a252f, #0d1318);
-        }
-
-        .btn-icon-svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
-        }
-
-        .speed-control {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-size: 0.85rem;
-            color: #777;
-        }
-
-        input[type=range] {
-            accent-color: var(--gold);
-            height: 25px; 
-            width: 100px;
-        }
-
         .description {
             font-size: 1.1rem;
-            line-height: 1.6;
+            line-height: 1.7;
             text-align: left;
             color: #333;
-            margin-bottom: 10px;
-        }
-
-        .word-highlight {
-            background-color: var(--highlight);
-            border-radius: 2px;
-            padding: 0 2px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
         }
 
         @media (max-width: 380px) {
-            h1 { font-size: 1.2rem; }
+            h1 { font-size: 1.3rem; }
             .description { font-size: 1rem; }
-            .art-card { padding: 15px 10px; }
+            .art-card { padding: 25px 15px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Sfondo Animato -->
+    <canvas id="bg-canvas"></canvas>
 
     <div class="art-card-container">
         <div class="light-glow"></div>
         
         <div class="art-card">
             <div class="content">
-                <h1 id="title">Scansiona il qr code</h1>
+                <h1 id="title">Scansiona il qr code davanti l'opera</h1>
                 <span class="artist-name"></span>
-                <span class="quote">Sito creato da Gabriele Branciforti 3C A.S.25/26</span>
-             
-                   
-
-         
+                <span class="quote">Sito creato da Gabriele Branciforti A.S. 25/26 - Classe 3C</span>
+                
+                <div class="description" id="textToRead">
+                    Benvenuti in questa esperienza interattiva. Inquadra il QR code per scoprire i dettagli dell'opera e lasciati trasportare dalla bellezza dell'arte.
                 </div>
-
-                <div class="description" id="textToRead"></div>
             </div>
         </div>
     </div>
 
     <script>
-        const synth = window.speechSynthesis;
-        let utterance = null;
-        const textToRead = document.getElementById('textToRead');
-        const originalHTML = textToRead.innerHTML;
-        
-        const playIcon = `<svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/></svg>`;
-        const stopIcon = `<svg class="btn-icon-svg" viewBox="0 0 24 24"><path d="M18,18H6V6H18V18Z" /></svg>`;
+        // --- LOGICA SFONDO DINAMICO (PARTICELLE D'ORO) ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
-        let lastCharIndex = 0; 
-        let isInternalAction = false; 
-
-        // Modificata la logica della velocità: 2x ora è più lento/naturale
-        function getRealRate(val) {
-            const visualVal = val / 10;
-            if (visualVal <= 1.0) return visualVal; 
-            // Ridotta la progressione per i valori sopra 1.0x
-            return 1.0 + (visualVal - 1.0) * 0.35; 
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
 
-        function humanizeText(text) {
-            return text
-                .replace(/\./g, '... ') 
-                .replace(/,/g, ', ')    
-                .replace(/ Friedrich/g, ' Fried-rich'); 
-        }
+        window.addEventListener('resize', resize);
+        resize();
 
-        document.getElementById('speedRange').oninput = (e) => {
-            const visualValue = (e.target.value / 10).toFixed(1);
-            document.getElementById('speedVal').innerText = visualValue + "x";
-            
-            if (synth.speaking) {
-                isInternalAction = true;
-                synth.cancel();
-                setTimeout(() => {
-                    startAudio(lastCharIndex);
-                    isInternalAction = false;
-                }, 10);
+        class Particle {
+            constructor() {
+                this.reset();
             }
-        };
-
-        function toggleAudio() {
-            isInternalAction = true;
-            if (synth.speaking) {
-                synth.cancel();
-                lastCharIndex = 0;
-                resetUI();
-                setTimeout(() => { isInternalAction = false; }, 50);
-                return;
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.life = Math.random() * 1;
+                this.opacity = Math.random() * 0.5;
             }
-            synth.cancel(); 
-            startAudio(0);
-            isInternalAction = false;
-        }
-
-        function startAudio(startIndex = 0) {
-            const fullText = textToRead.innerText;
-            const textToSpeak = fullText.substring(startIndex);
-            const processedText = humanizeText(textToSpeak);
-
-            utterance = new SpeechSynthesisUtterance(processedText);
-            utterance.lang = 'it-IT';
-            utterance.rate = getRealRate(document.getElementById('speedRange').value);
-            utterance.pitch = 0.95; 
-
-            const voices = synth.getVoices();
-            const preferredVoice = voices.find(v => 
-                v.lang.includes('it-IT') && 
-                (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Premium'))
-            ) || voices.find(v => v.lang.includes('it-IT'));
-
-            if (preferredVoice) utterance.voice = preferredVoice;
-
-            utterance.onboundary = (event) => {
-                if (event.name === 'word') {
-                    const globalIndex = startIndex + event.charIndex;
-                    lastCharIndex = globalIndex;
-                    highlightWord(globalIndex, event.charLength);
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
                 }
-            };
-
-            utterance.onstart = () => {
-                document.getElementById('mainBtn').classList.add('playing');
-                document.getElementById('btnText').innerText = "Ferma Lettura";
-                document.getElementById('btnIconContainer').innerHTML = stopIcon;
-                document.getElementById('statusLabel').innerText = "Lettura in corso...";
-            };
-
-            utterance.onend = () => {
-                if (!isInternalAction) {
-                    lastCharIndex = 0;
-                    resetUI();
-                }
-            };
-
-            utterance.onerror = (e) => {
-                if (!isInternalAction && e.error !== 'interrupted' && e.error !== 'canceled') {
-                    resetUI();
-                    document.getElementById('statusLabel').innerText = "Errore. Riprova.";
-                }
-            };
-
-            synth.speak(utterance);
+            }
+            draw() {
+                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
 
-        function highlightWord(charIndex, charLength) {
-            const text = textToRead.innerText;
-            const before = text.substring(0, charIndex);
-            const word = text.substring(charIndex, charIndex + charLength);
-            const after = text.substring(charIndex + charLength);
-            textToRead.innerHTML = `${before}<span class="word-highlight">${word}</span>${after}`;
+        for (let i = 0; i < 100; i++) {
+            particles.push(new Particle());
         }
 
-        function resetUI() {
-            textToRead.innerHTML = originalHTML;
-            document.getElementById('mainBtn').classList.remove('playing');
-            document.getElementById('btnText').innerText = "Ascolta descrizione";
-            document.getElementById('btnIconContainer').innerHTML = playIcon;
-            document.getElementById('statusLabel').innerText = "Guida pronta all'uso";
+        function animateBg() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateBg);
         }
-
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = () => synth.getVoices();
-        }
-
-        window.onbeforeunload = () => synth.cancel();
+        animateBg();
     </script>
 
 </body>
 </html>
-
