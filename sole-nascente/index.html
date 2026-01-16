@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dettagli Opera d'Arte - Claude Monet</title>
+    <style>
+        :root {
+            /* Palette basata sui colori di Impressione, sole nascente */
+            --monet-orange: #ff5733;      /* Il sole arancione */
+            --monet-blue-grey: #4a6fa5;   /* La nebbia e il mare */
+            --monet-mist: #a2d2ff;        /* L'atmosfera mattutina */
+            --monet-dark-boat: #1a2a3a;   /* Le sagome delle barche */
+            --monet-reflection: #ffbd69;  /* Riflessi del sole sull'acqua */
+            --gold-primary: #d4af37;      /* Oro della cornice e del tasto */
+            --gold-bright: #fff9e6; 
+            --gold-dark: #a88e5a;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 10px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Sfondo fluido con i colori dell'alba di Monet */
+            background: linear-gradient(125deg, 
+                var(--monet-blue-grey), 
+                var(--monet-mist), 
+                var(--monet-orange), 
+                var(--monet-dark-boat), 
+                var(--monet-reflection));
+            background-size: 300% 300%;
+            animation: artGradient 60s ease-in-out infinite;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        @keyframes artGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .art-card-container {
+            position: relative;
+            padding: 8px; 
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            border-radius: 12px;
+            overflow: hidden; 
+        }
+
+        .light-glow {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, var(--monet-orange) 0%, var(--monet-reflection) 30%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            filter: blur(40px);
+            opacity: 0.3;
+        }
+
+        .glow-1 { top: 0; left: 0; animation: move-light-1 40s linear infinite; }
+        .glow-2 { bottom: 0; right: 0; animation: move-light-2 40s linear infinite; }
+
+        @keyframes move-light-1 {
+            0%   { transform: translate(-30%, -30%); top: 0; left: 0; }            
+            50%  { transform: translate(-30%, -30%); top: 80%; left: 80%; } 
+            100% { transform: translate(-30%, -30%); top: 0; left: 0; }            
+        }
+        @keyframes move-light-2 {
+            0%   { transform: translate(30%, 30%); bottom: 0; right: 0; }            
+            50%  { transform: translate(30%, 30%); bottom: 80%; right: 80%; } 
+            100% { transform: translate(30%, 30%); bottom: 0; right: 0; }            
+        }
+
+        .art-card {
+            background: white;
+            position: relative;
+            z-index: 3;
+            padding: 30px 25px; 
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .artist-name {
+            font-style: italic;
+            color: #444;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .quote {
+            display: block;
+            font-style: italic;
+            color: rgba(68, 68, 68, 0.6);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .controls-panel {
+            border-bottom: 1px solid #f0f0f0; 
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Pulsante ripristinato a gradiente ORO */
+        .main-btn {
+            background: linear-gradient(to bottom, var(--gold-primary), var(--gold-dark));
+            color: white;
+            border: none;
+            padding: 18px; 
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
+            width: 100%;
+            user-select: none;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        .main-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Quando in riproduzione, diventa leggermente più scuro ma rimane dorato/nero per contrasto */
+        .main-btn.playing { 
+            background: #222;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        input[type=range] {
+            accent-color: var(--gold-primary);
+            width: 120px;
+            height: 30px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            text-align: left;
+            color: #222;
+            position: relative;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .art-card { padding: 25px 15px; }
+            h1 { font-size: 1.2rem; }
+            .description { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="art-card-container">
+        <div class="light-glow glow-1"></div>
+        <div class="light-glow glow-2"></div>
+        
+        <div class="art-card">
+            <h1>Impressione, sole nascente</h1>
+            <span class="artist-name">Claude Monet (1872/1874)</span>
+            <span class="quote">Dipinto da Giorgia Spinello - A.S. 2025/2026</span>
+            
+            <div class="controls-panel">
+                <button id="mainBtn" class="main-btn">
+                    <span id="btnIconContainer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </span>
+                    <span id="btnText">Ascolta descrizione</span>
+                </button>
+
+                <div class="speed-control">
+                    <span>Velocità:</span>
+                    <input type="range" id="speedRange" min="5" max="15" step="1" value="10">
+                    <span id="speedVal">1.0x</span>
+                </div>
+            </div>
+
+            <div class="description" id="textContent">
+                Il dipinto Impressione, sole nascente di Claude Monet, esposto nel 1874 nello studio del fotografo Nadar, raffigura il porto di Le Havre avvolto dalla nebbia del mattino. La scena mostra gru, ciminiere e pennoni delle navi sfumati nell’atmosfera, mentre sull’acqua galleggiano tre piccole barche e il sole arancione si alza all’orizzonte, riflettendosi sul mare. Monet utilizza pennellate rapide e non sfumate, tipiche dell’Impressionismo, rendendo le figure quasi indistinguibili e isolate. Aggiunge successivamente le barche in primo piano e il disco del sole per dare luce e movimento alla scena, più evocata che descritta nei dettagli. Il dipinto è dominato da toni azzurro-grigi con contrasti arancio che creano un effetto luminoso, senza l’uso del nero. Monet si ispira alle teorie di Chevreul, accostando colori complementari puri per esaltare la luce. Le forme sono solo suggerite e lo spazio è costruito grazie alle tre barche viste dall’alto, che guidano lo sguardo verso la profondità del porto. Le barche dei contrabbandieri occupano il primo piano della distesa marina. Monet rappresentò la veduta del porto da un punto di vista elevato che corrisponde alla sua camera d’albergo. Le tre imbarcazioni che si succedono in profondità, sulla sinistra, costruiscono la profondità del primo piano. Il dipinto è diviso in due parti sovrapposte: la parte inferiore mostra l’acqua della Manica, mentre quella superiore è occupata dal cielo, su cui si stagliano le sagome degli edifici, delle gru e delle strutture industriali. I pontili laterali, il Quai au Bois a sinistra e il Quai Courbe a destra, sostengono l’equilibrio dell’intera scena.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('mainBtn');
+        const textContent = document.getElementById('textContent');
+        const speedRange = document.getElementById('speedRange');
+        const speedVal = document.getElementById('speedVal');
+        const originalText = textContent.innerText;
+
+        let synth = window.speechSynthesis;
+        let isPlaying = false;
+        let utterance = null;
+
+        const iconPlay = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+        const iconStop = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+
+        function prepareTextForSpeech(text) {
+            return text
+                .replace(/Claude Monet/gi, 'Clòd Moné') 
+                .replace(/Le Havre/gi, 'Le Àvr')
+                .replace(/Nadar/gi, 'Nadàr')
+                .replace(/Chevreul/gi, 'Scevrèl')
+                .replace(/Quai au Bois/gi, 'Ché o Buà')
+                .replace(/Quai Courbe/gi, 'Ché Curb')
+                .replace(/1874/g, 'millottocentosettantaquattro')
+                .replace(/\. /g, '... ') 
+                .replace(/: /g, ', ');
+        }
+
+        function unlockAudio() {
+            const silent = new SpeechSynthesisUtterance('');
+            silent.volume = 0;
+            synth.speak(silent);
+            document.removeEventListener('touchstart', unlockAudio);
+            document.removeEventListener('mousedown', unlockAudio);
+        }
+        document.addEventListener('touchstart', unlockAudio);
+        document.addEventListener('mousedown', unlockAudio);
+
+        speedRange.addEventListener('input', () => {
+            speedVal.innerText = (speedRange.value / 10).toFixed(1) + "x";
+            if (isPlaying) {
+                stopAudio();
+                startAudio();
+            }
+        });
+
+        btn.addEventListener('click', () => {
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                startAudio();
+            }
+        });
+
+        function startAudio() {
+            synth.cancel();
+            
+            const speechText = prepareTextForSpeech(originalText);
+            utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.lang = 'it-IT';
+            utterance.rate = speedRange.value / 10;
+
+            const voices = synth.getVoices();
+            const preferred = voices.find(v => v.lang.startsWith('it') && (v.name.includes('Natural') || v.name.includes('Premium'))) || 
+                            voices.find(v => v.lang.startsWith('it'));
+            if (preferred) utterance.voice = preferred;
+
+            utterance.onstart = () => {
+                isPlaying = true;
+                btn.classList.add('playing');
+                document.getElementById('btnText').innerText = "Ferma Lettura";
+                document.getElementById('btnIconContainer').innerHTML = iconStop;
+            };
+
+            utterance.onend = () => {
+                if (isPlaying) stopAudio();
+            };
+
+            synth.speak(utterance);
+        }
+
+        function stopAudio() {
+            synth.cancel();
+            isPlaying = false;
+            btn.classList.remove('playing');
+            document.getElementById('btnText').innerText = "Ascolta descrizione";
+            document.getElementById('btnIconContainer').innerHTML = iconPlay;
+        }
+
+        window.onbeforeunload = () => synth.cancel();
+    </script>
+</body>
+</html>
