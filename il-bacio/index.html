@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dettagli Opera d'Arte - Gustav Klimt</title>
+    <style>
+        :root {
+            /* Palette basata sui colori de Il Bacio */
+            --klimt-gold-bright: #ffdf00;  /* Oro brillante */
+            --klimt-gold-deep: #d4af37;    /* Oro antico */
+            --klimt-flower-purple: #8e44ad; /* Fiori viola del prato */
+            --klimt-flower-yellow: #f1c40f; /* Fiori gialli del prato */
+            --klimt-dark-geo: #2c3e50;      /* Motivi geometrici neri */
+            --gold-primary: #d4af37;       /* Oro della cornice */
+            --gold-dark: #a88e5a;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 10px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Sfondo che simula la foglia d'oro e i mosaici */
+            background: linear-gradient(125deg, 
+                var(--klimt-gold-deep), 
+                var(--klimt-gold-bright), 
+                var(--klimt-gold-deep), 
+                var(--klimt-dark-geo));
+            background-size: 300% 300%;
+            animation: goldGradient 60s ease-in-out infinite;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        @keyframes goldGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .art-card-container {
+            position: relative;
+            padding: 8px; 
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            border-radius: 12px;
+            overflow: hidden; 
+        }
+
+        .light-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--klimt-gold-bright) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            filter: blur(50px);
+            opacity: 0.3;
+        }
+
+        .glow-1 { top: -50px; left: -50px; animation: pulse 8s infinite alternate; }
+        @keyframes pulse { from { opacity: 0.2; } to { opacity: 0.4; } }
+
+        .art-card {
+            background: white;
+            position: relative;
+            z-index: 3;
+            padding: 30px 25px; 
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .artist-name {
+            font-style: italic;
+            color: #444;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .quote {
+            display: block;
+            font-style: italic;
+            color: rgba(68, 68, 68, 0.6);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .controls-panel {
+            border-bottom: 1px solid #f0f0f0; 
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .main-btn {
+            background: linear-gradient(to bottom, var(--gold-primary), var(--gold-dark));
+            color: white;
+            border: none;
+            padding: 18px; 
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
+            width: 100%;
+            user-select: none;
+            transition: transform 0.2s ease, filter 0.3s ease;
+        }
+
+        .main-btn:active {
+            transform: scale(0.98);
+        }
+
+        .main-btn.playing { 
+            filter: brightness(1.2) contrast(1.1);
+            background: #2c3e50;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        input[type=range] {
+            accent-color: var(--gold-primary);
+            width: 120px;
+            height: 30px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            text-align: left;
+            color: #222;
+            position: relative;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .art-card { padding: 25px 15px; }
+            h1 { font-size: 1.2rem; }
+            .description { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="art-card-container">
+        <div class="light-glow glow-1"></div>
+        
+        <div class="art-card">
+            <h1>Il Bacio</h1>
+            <span class="artist-name">Gustav Klimt (1907-1908)</span>
+            <span class="quote">Analisi opera - A.S. 2025/2026</span>
+            
+            <div class="controls-panel">
+                <button id="mainBtn" class="main-btn">
+                    <span id="btnIconContainer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </span>
+                    <span id="btnText">Ascolta descrizione</span>
+                </button>
+
+                <div class="speed-control">
+                    <span>Velocità:</span>
+                    <input type="range" id="speedRange" min="5" max="15" step="1" value="10">
+                    <span id="speedVal">1.0x</span>
+                </div>
+            </div>
+
+            <div class="description" id="textContent">
+                Il Bacio di Gustav Klimt è un dipinto molto noto e rappresenta un simbolo del periodo definito Secessione. Il fondo in foglia d’oro fu ispirato all’artista viennese dalle tessere dei mosaici bizantini di Ravenna. Un uomo e una donna si abbracciano dolcemente al centro di uno spazio astratto. L’uomo tiene tra le mani il viso della donna con tenerezza e si china su di lei dall’alto, mentre la giovane poggia il capo reclinato sulla propria spalla sinistra. I suoi occhi sono chiusi, il volto è sereno e leggermente arrossato sulle gote, con un’espressione di pace e abbandono. La donna ha dei fiori tra i capelli e con una mano stringe quella dell’uomo, mentre l’altra si appoggia sul suo collo. Entrambi indossano vesti molto colorate e decorate con motivi astratti: la donna porta un abito aderente che lascia scoperte le spalle e parte delle gambe, l’uomo invece è avvolto in una tunica dorata con forme geometriche nei toni del nero, bianco e grigio. Una ghirlanda d’edera orna i suoi capelli. I due sono inginocchiati su un prato ricoperto di fiori gialli e viola, mentre una luce dorata li circonda, scendendo come un velo fino al terreno. Lo sfondo è semplice, monocromatico e bidimensionale, mettendo in evidenza l’intimità e la poesia dell’abbraccio tra i due amanti.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('mainBtn');
+        const textContent = document.getElementById('textContent');
+        const speedRange = document.getElementById('speedRange');
+        const speedVal = document.getElementById('speedVal');
+        const originalText = textContent.innerText;
+
+        let synth = window.speechSynthesis;
+        let isPlaying = false;
+        let utterance = null;
+
+        const iconPlay = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+        const iconStop = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+
+        function prepareTextForSpeech(text) {
+            return text
+                .replace(/Gustav Klimt/gi, 'Gustav Klimt') 
+                .replace(/Secessione/gi, 'Secessióne')
+                .replace(/A\.S\./gi, 'Anno Scolastico')
+                .replace(/\. /g, '... ') 
+                .replace(/, /g, ', ');
+        }
+
+        function unlockAudio() {
+            const silent = new SpeechSynthesisUtterance('');
+            silent.volume = 0;
+            synth.speak(silent);
+            document.removeEventListener('touchstart', unlockAudio);
+            document.removeEventListener('mousedown', unlockAudio);
+        }
+        document.addEventListener('touchstart', unlockAudio);
+        document.addEventListener('mousedown', unlockAudio);
+
+        speedRange.addEventListener('input', () => {
+            speedVal.innerText = (speedRange.value / 10).toFixed(1) + "x";
+            if (isPlaying) {
+                stopAudio();
+                startAudio();
+            }
+        });
+
+        btn.addEventListener('click', () => {
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                startAudio();
+            }
+        });
+
+        function startAudio() {
+            synth.cancel();
+            
+            const speechText = prepareTextForSpeech(originalText);
+            utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.lang = 'it-IT';
+            utterance.rate = speedRange.value / 10;
+
+            const voices = synth.getVoices();
+            const preferred = voices.find(v => v.lang.startsWith('it') && (v.name.includes('Natural') || v.name.includes('Premium'))) || 
+                            voices.find(v => v.lang.startsWith('it'));
+            if (preferred) utterance.voice = preferred;
+
+            utterance.onstart = () => {
+                isPlaying = true;
+                btn.classList.add('playing');
+                document.getElementById('btnText').innerText = "Ferma Lettura";
+                document.getElementById('btnIconContainer').innerHTML = iconStop;
+            };
+
+            utterance.onend = () => {
+                if (isPlaying) stopAudio();
+            };
+
+            synth.speak(utterance);
+        }
+
+        function stopAudio() {
+            synth.cancel();
+            isPlaying = false;
+            btn.classList.remove('playing');
+            document.getElementById('btnText').innerText = "Ascolta descrizione";
+            document.getElementById('btnIconContainer').innerHTML = iconPlay;
+        }
+
+        window.onbeforeunload = () => synth.cancel();
+    </script>
+</body>
+</html>
