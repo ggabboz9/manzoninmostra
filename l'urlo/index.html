@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dettagli Opera d'Arte - Edvard Munch</title>
+    <style>
+        :root {
+            /* Palette basata sui colori de L'Urlo */
+            --munch-sky-red: #b22222;      /* Rosso sangue del cielo */
+            --munch-sky-orange: #ff8c00;   /* Arancio infuocato */
+            --munch-sea-blue: #001a33;     /* Blu-nero del fiordo */
+            --munch-face-pale: #e0e0d1;    /* Colorito pallido/scheletrico */
+            --munch-dark-robe: #1a1a1a;    /* Veste scura della figura */
+            --gold-primary: #d4af37;       /* Oro della cornice */
+            --gold-dark: #a88e5a;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 10px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Sfondo che simula il tramonto di Oslo con colori vibranti */
+            background: linear-gradient(125deg, 
+                var(--munch-sky-red), 
+                var(--munch-sky-orange), 
+                var(--munch-sea-blue), 
+                var(--munch-dark-robe));
+            background-size: 300% 300%;
+            animation: screamGradient 60s ease-in-out infinite;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        @keyframes screamGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .art-card-container {
+            position: relative;
+            padding: 8px; 
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            border-radius: 12px;
+            overflow: hidden; 
+        }
+
+        .light-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--munch-sky-orange) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            filter: blur(50px);
+            opacity: 0.25;
+        }
+
+        .glow-1 { top: -50px; left: -50px; animation: pulse 10s infinite alternate; }
+        @keyframes pulse { from { opacity: 0.1; } to { opacity: 0.3; } }
+
+        .art-card {
+            background: white;
+            position: relative;
+            z-index: 3;
+            padding: 30px 25px; 
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .artist-name {
+            font-style: italic;
+            color: #444;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .quote {
+            display: block;
+            font-style: italic;
+            color: rgba(68, 68, 68, 0.6);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .controls-panel {
+            border-bottom: 1px solid #f0f0f0; 
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .main-btn {
+            background: linear-gradient(to bottom, var(--gold-primary), var(--gold-dark));
+            color: white;
+            border: none;
+            padding: 18px; 
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
+            width: 100%;
+            user-select: none;
+            transition: transform 0.2s ease, filter 0.3s ease;
+        }
+
+        .main-btn:active {
+            transform: scale(0.98);
+        }
+
+        .main-btn.playing { 
+            filter: hue-rotate(-20deg) contrast(1.2);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        input[type=range] {
+            accent-color: var(--gold-primary);
+            width: 120px;
+            height: 30px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            text-align: left;
+            color: #222;
+            position: relative;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .art-card { padding: 25px 15px; }
+            h1 { font-size: 1.2rem; }
+            .description { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="art-card-container">
+        <div class="light-glow glow-1"></div>
+        
+        <div class="art-card">
+            <h1>L'Urlo</h1>
+            <span class="artist-name">Edvard Munch (1893)</span>
+            <span class="quote">Analisi opera - A.S. 2025/2026</span>
+            
+            <div class="controls-panel">
+                <button id="mainBtn" class="main-btn">
+                    <span id="btnIconContainer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </span>
+                    <span id="btnText">Ascolta descrizione</span>
+                </button>
+
+                <div class="speed-control">
+                    <span>Velocità:</span>
+                    <input type="range" id="speedRange" min="5" max="15" step="1" value="10">
+                    <span id="speedVal">1.0x</span>
+                </div>
+            </div>
+
+            <div class="description" id="textContent">
+                L'Urlo di Munch raffigura una figura androgina, scheletrica e angosciata su un ponte, che si tappa le orecchie mentre un cielo rosso sangue e un paesaggio distorto sembrano urlare con lei, rappresentando il panico esistenziale e il dolore universale attraverso linee ondulate e colori vibranti che trasmettono terrore e disperazione, in una scena ispirata a un'esperienza personale dell'artista di fronte a un tramonto infuocato vicino a Oslo. A destra del dipinto si sviluppa il mare con la sua isola centrale. A circa tre quarti dell’altezza si trova poi la linea dell’orizzonte, ondulata e mossa. Da qui sale il cielo modellato da linee sinuose orizzontali e sovrapposte. Al centro dell’immagine, in basso, si trova invece la figura umana serpeggiante che porta le mani al viso e urla con disperazione. Il suo volto è privo di connotati di età e sesso. Anche gli abiti che indossa sono semplificati e ridotti ad una veste scura che copre interamente il corpo. Infine, al limite posteriore del sentiero si intravedono due sagome umane che procedono affiancate. Il cielo è di colore Rosso intenso, arancio e giallo che simulano fiamme e sangue, simboleggiando paura, sofferenza e una natura apocalittica; Munch stesso descrisse il cielo come "rosso sangue". Il fiordo è di un blu-nero profondo, mentre le onde e le colline ondulate riflettono il tumulto interiore del personaggio. Il volto scheletrico e pallido, è quasi liquefatto e in preda alla disperazione. I colori esprimono un'angoscia esistenziale, un senso di alienazione e il terrore dell'uomo moderno di fronte a un mondo indifferente.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('mainBtn');
+        const textContent = document.getElementById('textContent');
+        const speedRange = document.getElementById('speedRange');
+        const speedVal = document.getElementById('speedVal');
+        const originalText = textContent.innerText;
+
+        let synth = window.speechSynthesis;
+        let isPlaying = false;
+        let utterance = null;
+
+        const iconPlay = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+        const iconStop = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+
+        function prepareTextForSpeech(text) {
+            return text
+                .replace(/Munch/gi, 'Munk') 
+                .replace(/Oslo/gi, 'Oslo')
+                .replace(/A\.S\./gi, 'Anno Scolastico')
+                .replace(/\. /g, '... ') 
+                .replace(/, /g, ', ');
+        }
+
+        function unlockAudio() {
+            const silent = new SpeechSynthesisUtterance('');
+            silent.volume = 0;
+            synth.speak(silent);
+            document.removeEventListener('touchstart', unlockAudio);
+            document.removeEventListener('mousedown', unlockAudio);
+        }
+        document.addEventListener('touchstart', unlockAudio);
+        document.addEventListener('mousedown', unlockAudio);
+
+        speedRange.addEventListener('input', () => {
+            speedVal.innerText = (speedRange.value / 10).toFixed(1) + "x";
+            if (isPlaying) {
+                stopAudio();
+                startAudio();
+            }
+        });
+
+        btn.addEventListener('click', () => {
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                startAudio();
+            }
+        });
+
+        function startAudio() {
+            synth.cancel();
+            
+            const speechText = prepareTextForSpeech(originalText);
+            utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.lang = 'it-IT';
+            utterance.rate = speedRange.value / 10;
+
+            const voices = synth.getVoices();
+            const preferred = voices.find(v => v.lang.startsWith('it') && (v.name.includes('Natural') || v.name.includes('Premium'))) || 
+                            voices.find(v => v.lang.startsWith('it'));
+            if (preferred) utterance.voice = preferred;
+
+            utterance.onstart = () => {
+                isPlaying = true;
+                btn.classList.add('playing');
+                document.getElementById('btnText').innerText = "Ferma Lettura";
+                document.getElementById('btnIconContainer').innerHTML = iconStop;
+            };
+
+            utterance.onend = () => {
+                if (isPlaying) stopAudio();
+            };
+
+            synth.speak(utterance);
+        }
+
+        function stopAudio() {
+            synth.cancel();
+            isPlaying = false;
+            btn.classList.remove('playing');
+            document.getElementById('btnText').innerText = "Ascolta descrizione";
+            document.getElementById('btnIconContainer').innerHTML = iconPlay;
+        }
+
+        window.onbeforeunload = () => synth.cancel();
+    </script>
+</body>
+</html>
