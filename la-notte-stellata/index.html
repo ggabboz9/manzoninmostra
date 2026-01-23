@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dettagli Opera d'Arte - Van Gogh</title>
+    <style>
+        :root {
+            /* Palette basata sui colori de La Notte Stellata */
+            --vg-night-blue: #1a2a44;      /* Blu oltremare profondo */
+            --vg-vortex-blue: #4a6fa5;     /* Blu dei vortici */
+            --vg-star-yellow: #f4d03f;     /* Giallo delle stelle */
+            --vg-moon-orange: #ff9f1c;     /* Arancio della luna */
+            --vg-cypress-black: #0d1317;   /* Nero del cipresso */
+            --gold-primary: #d4af37;       /* Oro della cornice e tasto */
+            --gold-dark: #a88e5a;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 10px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(125deg, 
+                var(--vg-night-blue), 
+                var(--vg-vortex-blue), 
+                var(--vg-star-yellow), 
+                var(--vg-cypress-black), 
+                var(--vg-moon-orange));
+            background-size: 300% 300%;
+            animation: starryGradient 60s ease-in-out infinite;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        @keyframes starryGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .art-card-container {
+            position: relative;
+            padding: 8px; 
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            border-radius: 12px;
+            overflow: hidden; 
+        }
+
+        .light-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--vg-star-yellow) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            filter: blur(50px);
+            opacity: 0.25;
+        }
+
+        .glow-1 { top: -50px; left: -50px; animation: pulse 10s infinite alternate; }
+        @keyframes pulse { from { opacity: 0.1; } to { opacity: 0.3; } }
+
+        .art-card {
+            background: white;
+            position: relative;
+            z-index: 3;
+            padding: 30px 25px; 
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .artist-name {
+            font-style: italic;
+            color: #444;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .quote {
+            display: block;
+            font-style: italic;
+            color: rgba(68, 68, 68, 0.6);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .controls-panel {
+            border-bottom: 1px solid #f0f0f0; 
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .main-btn {
+            background: linear-gradient(to bottom, var(--gold-primary), var(--gold-dark));
+            color: white;
+            border: none;
+            padding: 18px; 
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
+            width: 100%;
+            user-select: none;
+            transition: transform 0.2s ease, filter 0.3s ease;
+        }
+
+        .main-btn:active {
+            transform: scale(0.98);
+        }
+
+        .main-btn.playing { 
+            filter: hue-rotate(20deg) brightness(0.8);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        input[type=range] {
+            accent-color: var(--gold-primary);
+            width: 120px;
+            height: 30px;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            text-align: left;
+            color: #222;
+            position: relative;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .art-card { padding: 25px 15px; }
+            h1 { font-size: 1.2rem; }
+            .description { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="art-card-container">
+        <div class="light-glow glow-1"></div>
+        
+        <div class="art-card">
+            <h1>La notte stellata</h1>
+            <span class="artist-name">Vincent Van Gogh (1889)</span>
+            <span class="quote">Analisi opera - A.S. 2025/2026</span>
+            
+            <div class="controls-panel">
+                <button id="mainBtn" class="main-btn">
+                    <span id="btnIconContainer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </span>
+                    <span id="btnText">Ascolta descrizione</span>
+                </button>
+
+                <div class="speed-control">
+                    <span>Velocità:</span>
+                    <input type="range" id="speedRange" min="5" max="15" step="1" value="10">
+                    <span id="speedVal">1.0x</span>
+                </div>
+            </div>
+
+            <div class="description" id="textContent">
+                Van Gogh ha utilizzato brevi pennellate modellanti. La direzione dei segni colorati segue, infatti, la forma delle figure. Nei tetti le linee sono oblique, i cespugli e gli alberi lontani sono rappresentati con pennellate curve. Le montagne, invece, sono modellate con linee ondulate. Il grande cipresso, invece, sembra una grande fiammata scura. Il cielo, infine, è animato da vortici di nubi e vento che creano aloni luminosi intorno alle luci delle stelle e della luna. Il tormento di Vincent si coglie infatti nelle pennellate che registrano il suo gesto veloce e a tratti violento. Osservando la pasta colorata da vicino è possibile immaginare Van Gogh applicare il colore spesso quasi colpendo la superficie della tela e poi graffiarlo con la punta del manico del pennello. Una vasta gamma di blu e azzurri riempie tutta la superficie dipinta. La luce notturna è rappresentata dal blu oltremare, mentre la vegetazione diventa quasi nera. Le luci artificiali brillano gialle dalle finestre delle case. Nel cielo la luna e le stelle spiccano grazie al contrasto di complementari, infatti, il giallo-arancio è complementare al blu.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('mainBtn');
+        const textContent = document.getElementById('textContent');
+        const speedRange = document.getElementById('speedRange');
+        const speedVal = document.getElementById('speedVal');
+        const originalText = textContent.innerText;
+
+        let synth = window.speechSynthesis;
+        let isPlaying = false;
+        let utterance = null;
+
+        const iconPlay = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+        const iconStop = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+
+        function prepareTextForSpeech(text) {
+            return text
+                .replace(/Van Gogh/gi, 'Van Gòg') 
+                .replace(/Vincent/gi, 'Vinsènt')
+                .replace(/\. /g, '... ') 
+                .replace(/, /g, ', ');
+        }
+
+        function unlockAudio() {
+            const silent = new SpeechSynthesisUtterance('');
+            silent.volume = 0;
+            synth.speak(silent);
+            document.removeEventListener('touchstart', unlockAudio);
+            document.removeEventListener('mousedown', unlockAudio);
+        }
+        document.addEventListener('touchstart', unlockAudio);
+        document.addEventListener('mousedown', unlockAudio);
+
+        speedRange.addEventListener('input', () => {
+            speedVal.innerText = (speedRange.value / 10).toFixed(1) + "x";
+            if (isPlaying) {
+                stopAudio();
+                startAudio();
+            }
+        });
+
+        btn.addEventListener('click', () => {
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                startAudio();
+            }
+        });
+
+        function startAudio() {
+            synth.cancel();
+            
+            const speechText = prepareTextForSpeech(originalText);
+            utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.lang = 'it-IT';
+            utterance.rate = speedRange.value / 10;
+
+            const voices = synth.getVoices();
+            const preferred = voices.find(v => v.lang.startsWith('it') && (v.name.includes('Natural') || v.name.includes('Premium'))) || 
+                            voices.find(v => v.lang.startsWith('it'));
+            if (preferred) utterance.voice = preferred;
+
+            utterance.onstart = () => {
+                isPlaying = true;
+                btn.classList.add('playing');
+                document.getElementById('btnText').innerText = "Ferma Lettura";
+                document.getElementById('btnIconContainer').innerHTML = iconStop;
+            };
+
+            utterance.onend = () => {
+                if (isPlaying) stopAudio();
+            };
+
+            synth.speak(utterance);
+        }
+
+        function stopAudio() {
+            synth.cancel();
+            isPlaying = false;
+            btn.classList.remove('playing');
+            document.getElementById('btnText').innerText = "Ascolta descrizione";
+            document.getElementById('btnIconContainer').innerHTML = iconPlay;
+        }
+
+        window.onbeforeunload = () => synth.cancel();
+    </script>
+</body>
+</html>
