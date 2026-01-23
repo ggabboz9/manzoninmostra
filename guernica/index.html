@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dettagli Opera d'Arte - Picasso</title>
+    <title>Dettagli Opera d'Arte - Pablo Picasso</title>
     <style>
         :root {
-            /* Palette basata su interpretazioni a colori di Guernica */
-            --guernica-blue: #4a6fa5;
-            --guernica-ochre: #d4a373;
-            --guernica-terracotta: #bc6c25;
-            --guernica-dark: #283618;
-            --guernica-sky: #a2d2ff;
-            --gold-primary: #d4af37;
-            --gold-bright: #fff9e6; 
+            /* Palette basata sul bianco e nero di Guernica */
+            --guernica-black: #1a1a1a;
+            --guernica-grey-dark: #333333;
+            --guernica-grey-light: #cccccc;
+            --guernica-white: #f5f5f5;
+            --gold-primary: #d4af37;       /* Oro della cornice */
             --gold-dark: #a88e5a;
         }
 
@@ -25,20 +23,19 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            /* Sfondo ultra-lento (60s) con i colori dell'opera reinterpretata */
+            /* Sfondo drammatico che richiama i toni dell'opera */
             background: linear-gradient(125deg, 
-                var(--guernica-blue), 
-                var(--guernica-ochre), 
-                var(--guernica-terracotta), 
-                var(--guernica-dark), 
-                var(--guernica-sky));
+                var(--guernica-black), 
+                var(--guernica-grey-dark), 
+                var(--guernica-black), 
+                #000000);
             background-size: 300% 300%;
-            animation: colorGradient 60s ease-in-out infinite;
+            animation: darkGradient 60s ease-in-out infinite;
             overflow-x: hidden;
             touch-action: manipulation;
         }
 
-        @keyframes colorGradient {
+        @keyframes darkGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
@@ -50,36 +47,25 @@
             background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
             max-width: 600px;
             width: 100%;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
             border-radius: 12px;
             overflow: hidden; 
         }
 
         .light-glow {
             position: absolute;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, var(--gold-bright) 0%, var(--gold-primary) 30%, transparent 70%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 1;
-            filter: blur(40px);
-            opacity: 0.35;
+            filter: blur(50px);
+            opacity: 0.3;
         }
 
-        .glow-1 { top: 0; left: 0; animation: move-light-1 40s linear infinite; }
-        .glow-2 { bottom: 0; right: 0; animation: move-light-2 40s linear infinite; }
-
-        @keyframes move-light-1 {
-            0%   { transform: translate(-30%, -30%); top: 0; left: 0; }            
-            50%  { transform: translate(-30%, -30%); top: 80%; left: 80%; } 
-            100% { transform: translate(-30%, -30%); top: 0; left: 0; }            
-        }
-        @keyframes move-light-2 {
-            0%   { transform: translate(30%, 30%); bottom: 0; right: 0; }            
-            50%  { transform: translate(30%, 30%); bottom: 80%; right: 80%; } 
-            100% { transform: translate(30%, 30%); bottom: 0; right: 0; }            
-        }
+        .glow-1 { top: -50px; left: -50px; animation: pulse 8s infinite alternate; }
+        @keyframes pulse { from { opacity: 0.1; } to { opacity: 0.3; } }
 
         .art-card {
             background: white;
@@ -142,7 +128,7 @@
             box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
             width: 100%;
             user-select: none;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, filter 0.3s ease;
         }
 
         .main-btn:active {
@@ -150,7 +136,8 @@
         }
 
         .main-btn.playing { 
-            background: var(--guernica-blue);
+            filter: brightness(1.2) contrast(1.1);
+            background: #2c3e50;
         }
 
         .speed-control {
@@ -190,12 +177,11 @@
 
     <div class="art-card-container">
         <div class="light-glow glow-1"></div>
-        <div class="light-glow glow-2"></div>
         
         <div class="art-card">
             <h1>Guernica</h1>
-            <span class="artist-name">Pablo Picasso, 1937</span>
-            <span class="quote">Dipinta da Matilde Militello - A.S. 2025/2026</span>
+            <span class="artist-name">Pablo Picasso (1937)</span>
+            <span class="quote">Dipinto da Matilde Militello - A.S. 2025/2026</span>
             
             <div class="controls-panel">
                 <button id="mainBtn" class="main-btn">
@@ -213,7 +199,7 @@
             </div>
 
             <div class="description" id="textContent">
-                La Guernica di Pablo Picasso rappresenta la reazione dell'artista all'attacco aereo sulla città basca di Guernica. Il dipinto è un'insieme di forme geometriche e colori monocromatici, come grigi, neri e bianchi, che rappresentano il caos e la distruzione. La scena è dominata da figure di animali e umani distorti e sofferenti. Il toro, simbolo della Spagna e della brutalità, convive con il cavallo, che rappresenta l'innocenza e la sofferenza. Una donna che grida incarna il dolore e la disperazione delle vittime, mentre le fiamme e la distruzione circostante mostrano la devastazione della guerra. Picasso utilizza il cubismo per creare un effetto di frammentazione e disorientamento, enfatizzando l'orrore e la confusione del conflitto. Il dipinto è un potente atto di accusa contro la guerra e la violenza, diventando un simbolo universale della resistenza contro l'oppressione. In alto a destra, si nota una donna ferita che urla di paura tra le case in fiamme; ha le braccia alzate e il viso pieno di terrore. Indossa una gonna lunga nera, da cui si vedono spuntare le punte dei piedi, mentre dal vestito sembrano salire delle fiamme. Le sue mani aperte chiedono aiuto disperatamente. Dietro di lei si scorge una porta con un pomello tondo e, poco sopra, una finestra da cui fuoriescono ulteriori lingue di fuoco.
+                Guernica è un dipinto di Pablo Picasso del 1937, creato dopo il bombardamento della città spagnola di Guernica. L’opera è in bianco e nero e rappresenta il dolore, la morte e la distruzione causati dalla guerra. Al centro c’è un cavallo ferito, un toro, donne che urlano, un bambino morto e un soldato a terra. Le figure sono spezzate e confuse, per mostrare il caos. Picasso non usa la prospettiva naturale, ma mette tutto in primo piano per colpire l’osservatore. Il quadro è orizzontale e panoramico, l’impianto compositivo è narrativo e si distribuisce da destra a sinistra. I personaggi sono distribuiti sul primo piano e solo la loro sovrapposizione parziale crea un minimo di profondità. Il fondo è nero e le figure realizzate in bianco e con varie tonalità di grigio. Guernica è un simbolo universale contro la violenza e la guerra.
             </div>
         </div>
     </div>
@@ -235,11 +221,10 @@
         function prepareTextForSpeech(text) {
             return text
                 .replace(/Guernica/gi, 'Guernìca') 
-                .replace(/Picasso/gi, 'Picàsso')
-                .replace(/1937/g, 'millenovecentotrentasette')
-                .replace(/A\.S\./gi, 'Anno Scolastico') 
+                .replace(/Pablo Picasso/gi, 'Pablo Picàsso')
+                .replace(/A\.S\./gi, 'Anno Scolastico')
                 .replace(/\. /g, '... ') 
-                .replace(/: /g, ', ');
+                .replace(/, /g, ', ');
         }
 
         function unlockAudio() {
